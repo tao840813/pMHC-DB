@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{title}}</title>
+</head>
+<body>
+    {% if unit %}
+        <ul>
+            <li>編號：{{unit.id}}</li>
+            <li>姓名：{{unit.cName}}</li>
+            <li>性別：{{unit.cSex}}</li>
+            <li>生日：{{unit.cBirthday}}</li>
+            <li>Email：{{unit.cEmail}}</li>
+            <li>手機：{{unit.cPhone}}</li>
+            <li>地址：{{unit.cAddr}}</li>
+        </ul>
+    {% else %}
+        <p>沒有資料</p>
+    {% endif %}
+</body>
+</html>

@@ -1,0 +1,10 @@
+Cytokine = ['cytometric bead array',
+'radio immuno assay (RIA)',
+'antigen-loaded-targets, IFNg capture assay',
+'bioassay',
+'antigen loaded targets, IFNg capture assay',
+'RNA/DNA detection',
+'ELISPOT',
+'ICS',
+'reporter gene assay',
+'ELISA',]

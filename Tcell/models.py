@@ -1,0 +1,40 @@
+from django.db import models
+
+class Epitope(models.Model):
+    key = models.CharField(max_length=100,default='')
+
+    sequence = models.CharField(max_length=100,default='')
+    mhc_ambiguity = models.CharField(max_length=100,default='')
+    old_allele_name = models.CharField(max_length=100,default='')
+    mhc_convert = models.CharField(max_length=100,default='')
+    mhc_possible = models.CharField(max_length=100,default='')
+    pmid = models.CharField(max_length=100,default='')
+    date = models.CharField(max_length=100,default='')
+    title = models.CharField(max_length=100,default='')
+    journal = models.CharField(max_length=100,default='')
+    authors = models.CharField(max_length=100,default='')
+    tcellid = models.CharField(max_length=100,default='')
+    sourcemolecule = models.CharField(max_length=100,default='')
+    sourceorganism = models.CharField(max_length=100,default='')
+    epitopespecies = models.CharField(max_length=100,default='')
+    method = models.CharField(max_length=100,default='')
+    Response = models.CharField(max_length=100,default='')
+    qualitative = models.CharField(max_length=100,default='')
+    quantitative = models.CharField(max_length=100,default='')
+    gene = models.CharField(max_length=100,default='')
+    dbsource = models.CharField(max_length=100,default='')
+    pdbclear = models.CharField(max_length=100,default='')
+    pdbamb = models.CharField(max_length=100,default='')
+    pdbid = models.CharField(max_length=100,default='')
+    bound = models.CharField(max_length=100,default='')
+    pdb_pmid = models.CharField(max_length=100,default='')
+    pdb_date = models.CharField(max_length=100,default='')
+    VA_Chain = models.CharField(max_length=100,default='')
+    VB_Chain = models.CharField(max_length=100,default='')
+    VA_IMGT = models.CharField(max_length=100,default='')
+    VB_IMGT = models.CharField(max_length=100,default='')
+    Ag_Chain = models.CharField(max_length=100,default='')
+    MHC_Chain = models.CharField(max_length=100,default='')
+
+    def __str__(self):
+        return self.sequence

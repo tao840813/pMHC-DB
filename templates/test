@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Epitope Search</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $('a.search-link').click(function(e) {
+                e.preventDefault();
+                var ambiguity = $(this).data('ambiguity');
+                updateTable(ambiguity);
+            });
+
+            function updateTable(ambiguity) {
+                $.ajax({
+                    url: '/search/',  // 修改這裡的 URL 路徑
+                    type: 'GET',
+                    data: {ambiguity: ambiguity},
+                    success: function(response) {
+                        $('tbody').html(response);
+                    },
+                    error: function(xhr, errmsg, err) {
+                        console.log(errmsg);
+                    }
+                });
+            }
+        });
+    </script>
+</head>
+<body>
+    <a href="#" class="search-link" data-ambiguity="">Clear</a>
+    <a href="#" class="search-link" data-ambiguity="Ambiguous">Ambiguous</a>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Epitope Sequence</th>
+                <th>MHC Ambiguity</th>
+                <th>Old Allele Name</th>
+                <th>MHC Convert</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for epitope in epitopes %}
+                <tr>
+                    <td>{{ epitope.sequence }}</td>
+                    <td>{{ epitope.mhc_ambiguity }}</td>
+                    <td>{{ epitope.old_allele_name }}</td>
+                    <td>{{ epitope.mhc_convert }}</td>
+                </tr>
+            {% empty %}
+                <tr>
+                    <td colspan="4">No epitopes found.</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>

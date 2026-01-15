@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Epitope Search</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <style>
+        .custom-table {
+            table-layout: fixed;
+        }
+    .custom-table td {
+        max-width: 50px;
+        width: 25%;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+    .pmid-link {
+        color: blue; /* Set the font color to blue */
+    }
+</style>
+</head>
+<body>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-4">
+                <h4>Filter</h4>
+                <form method="get">
+                    <div class="mb-3">
+                        <label for="assay" class="form-label">T-cell Assay:</label>
+                        <select id="assay" name="assay" class="form-select">
+                            <option value="">All</option>
+                            {% for choice in assay_choices %}
+                            <option value="{{ choice }}" {% if choice == selected_assay %}selected{% endif %}>{{ choice }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="ambiguity" class="form-label">MHC Ambiguity:</label>
+                        <select id="ambiguity" name="ambiguity" class="form-select">
+                            <option value="">All</option>
+                            {% for choice in ambiguity_choices %}
+                            <option value="{{ choice }}" {% if choice == selected_ambiguity %}selected{% endif %}>{{ choice }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="species" class="form-label">Epitope Species:</label>
+                        <select id="species" name="species" class="form-select">
+                            <option value="">All</option>
+                            {% for choice in species_choices %}
+                            <option value="{{ choice }}" {% if choice == selected_species %}selected{% endif %}>{{ choice }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <h4>Sequence similarity search</h4>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="pathogen" id="pathogenBtn" value="pathogen">
+                            <label class="form-check-label" for="pathogenBtn">
+                                Pathogen
+                            </label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="pathogen" id="selfBtn" value="self">
+                            <label class="form-check-label" for="selfBtn">
+                                Self
+                            </label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="pathogen" id="nothingBtn" value="nothing" checked>
+                            <label class="form-check-label" for="nothingBtn">
+                                Nothing
+                            </label>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="peptide" class="form-label">Additional String:</label>
+                        <input type="text" id="peptide" name="peptide" class="form-control" value="AAFKRSCLK">
+                    </div>
+                    <div class="mb-3">
+                        <label for="pid" class="form-label">Peptide Similarity:</label>
+                        <span id="pidValue">100</span>
+                        <input type="range" id="pid" name="pid" class="form-range" min="0" max="100" value="100">
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label for="gap" class="form-label">Gap:</label>
+                            <input type="text" id="gap" name="gap" class="form-control" value="0">
+                        </div>
+                        <div class="col-md-6">
+                            <label for="sub" class="form-label">Substitution:</label>
+                            <input type="text" id="sub" name="sub" class="form-control" value="0">
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <input type="submit" value="Search" class="btn btn-primary">
+                    </div>
+                </form>
+            </div>
+            <div class="col-md-8">
+            <h4> Project(s) in : <span style="color: red;">{{ selected_species }}</span>    (total {{total_pmid}})</h4>
+                <table class="table custom-table">
+                    <thead>
+                        <th>PMID</th>
+                        <th>Date</th>
+                        <th>Journal</th>
+                        <th>Methods</th>
+                    </thead>
+                    <tbody>
+                    {% for pmid in pmids %}
+                    <tr>
+                        <td>{{ pmid.pmid }}</td>
+                        <td>{{ pmid.date }}</td>
+                        <td>{{ pmid.journal }}</td>
+                        <td>{{ pmid.method}}</td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="3">No pmids found.</td>
+                    </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            <div>
+            <table class="table custom-table">
+                <h4> Project(s) in : <span style="color: red;">{{ selected_species }}</span>    (total {{total_epitopes}})</h4>
+                <thead>
+                    <tr>
+                        <th>Epitope Sequence</th>
+                        <th>MHC Ambiguity</th>
+                        <th>Old Allele Name</th>
+                        <th>MHC Convert</th>
+                        <th>Epitope Species</th>
+                        <th>DB Source</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for epitope in page_obj %}
+                    <tr>
+                        <td><a href="{% url 'assay_detail' pk=epitope.key %}" class="pmid-link">{{ epitope.sequence }}</a></td>
+                        <td>{{ epitope.mhc_ambiguity }}</td>
+                        <td>{{ epitope.old_allele_name }}</td>
+                        <td>{{ epitope.mhc_convert }}</td>
+                        <td>{{ epitope.epitopespecies}}</td>
+                        <td>{{ epitope.dbsource}}</td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="4">No epitopes found.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            <nav aria-label="Epitope pagination">
+                <ul class="pagination justify-content-center">
+                    {% if page_obj.has_previous %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ page_obj.previous_page_number }}&amp;ambiguity={{ selected_ambiguity }}&amp;species={{ selected_species }}">Previous</a>
+                    </li>
+                    {% endif %}
+                    {% for num in page_obj.paginator.page_range %}
+                    {% if page_obj.number == num %}
+                    <li class="page-item active" aria-current="page">
+                        <a class="page-link" href="?page={{ num }}&amp;ambiguity={{ selected_ambiguity }}&amp;species={{ selected_species }}">{{ num }}</a>
+                    </li>
+                    {% else %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ num }}&amp;ambiguity={{ selected_ambiguity }}&amp;species={{ selected_species }}">{{ num }}</a>
+                    </li>
+                    {% endif %}
+                    {% endfor %}
+                    {% if page_obj.has_next %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ page_obj.next_page_number }}&amp;ambiguity={{ selected_ambiguity }}&amp;species={{ selected_species }}">Next</a>
+                    </li>
+                    {% endif %}
+                </ul>
+            </nav>
+        </div>
+        </div>
+    </div>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    const pidSlider = document.getElementById("pid");
+    const pidValue = document.getElementById("pidValue");
+
+    pidSlider.addEventListener("input", () => {
+        pidValue.textContent = pidSlider.value;
+    });
+</script>
+
+</body>
+</html>

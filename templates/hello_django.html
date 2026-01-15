@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{title}}</title>
+    {% load static %}
+    <link href="{% static 'css/style.css'%}" rel="stylesheet">
+</head>
+<body>
+    <h1>{{data}}</h1>
+    <h2>季統計</h2>
+    {% if seasons %}
+        <ul>
+        {% for i in seasons %}
+            <li>{{i}}</li>
+        {% endfor %}
+        </ul>
+    {% else %}
+        <p>沒有資料</p>
+    {% endif %}
+    <h2>人員清單</h2>
+    {% if persons %}
+    <table border="1">
+    {% for person in persons %}
+        <tr>
+            <td>{{person.name}}</td>
+            <td>{{person.phone}}</td>
+            <td>{{person.age}}</td>
+        </tr>
+    {% endfor %}
+    </table>
+    {% else %}
+        <p>沒有資料</p>
+    {% endif %}
+    <img src="{% static 'images/py-django.png' %}" alt="python/django">
+    <p>現在時刻：<span class="info">{{now}}</span></p>
+</body>
+</html>

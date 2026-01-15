@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Epitope Search</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <style>
+        .custom-table {
+            table-layout: fixed;
+        }
+    .custom-table td {
+        max-width: 50px;
+        width: 25%;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+</style>
+</head>
+<body>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-4">
+                <form method="get">
+                    <div class="mb-3">
+                        <label for="ambiguity" class="form-label">MHC Ambiguity:</label>
+                        <select id="ambiguity" name="ambiguity" class="form-select">
+                            <option value="">All</option>
+                            {% for choice in ambiguity_choices %}
+                            <option value="{{ choice }}" {% if choice == selected_ambiguity %}selected{% endif %}>{{ choice }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <input type="submit" value="Search" class="btn btn-primary">
+                    </div>
+                </form>
+            </div>
+            <div class="col-md-8">
+                <table class="table custom-table">
+                    <thead>
+                        <tr>
+                            <th>Epitope Sequence</th>
+                            <th>MHC Ambiguity</th>
+                            <th>Old Allele Name</th>
+                            <th>MHC Convert</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for epitope in epitopes %}
+                        <tr>
+                            <td>{{ epitope.sequence }}</td>
+                            <td>{{ epitope.mhc_ambiguity }}</td>
+                            <td>{{ epitope.old_allele_name }}</td>
+                            <td>{{ epitope.mhc_convert }}</td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="4">No epitopes found.</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
